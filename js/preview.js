@@ -7,7 +7,11 @@ export function updateLivePreview(state) {
   const cw = container.clientWidth;
   if (cw <= 0) return;
 
-  const scale = cw / state.fieldW;
+  const maxH = window.innerHeight - 140;
+  const scaleW = cw / state.fieldW;
+  const scaleH = maxH / state.fieldH;
+  const scale = Math.min(scaleW, scaleH);
+
   const field = $('field');
   field.style.width = state.fieldW + 'px';
   field.style.height = state.fieldH + 'px';

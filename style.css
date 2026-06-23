@@ -441,7 +441,9 @@ main {
 }
 
 #field {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   transform-origin: 0 0;
   background: #0c1018;
 }
@@ -502,7 +504,6 @@ body.mode-preview .right-col {
 }
 
 body.mode-preview .left-col {
-  max-width: 900px;
   width: 100%;
 }
 
