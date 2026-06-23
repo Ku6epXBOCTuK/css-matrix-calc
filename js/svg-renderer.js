@@ -40,13 +40,17 @@ export function renderSVG(svg, state) {
   }
   svg.appendChild(gridG);
 
+  const cx = state.corners.reduce((s, c) => s + c.x, 0) / 4;
+  const cy = state.corners.reduce((s, c) => s + c.y, 0) / 4;
+
   const widgetRect = document.createElementNS(ns, 'rect');
   setAttrs(widgetRect, {
-    x: 0, y: 0,
+    x: cx - state.widgetW / 2,
+    y: cy - state.widgetH / 2,
     width: state.widgetW,
     height: state.widgetH,
-    fill: 'none',
-    stroke: 'rgba(88,166,255,0.2)',
+    fill: 'rgba(88,166,255,0.12)',
+    stroke: 'rgba(88,166,255,0.4)',
     'stroke-width': 2,
     'stroke-dasharray': '12,8'
   });
