@@ -481,23 +481,26 @@ main {
   font-style: italic;
 }
 
-body.mode-edit .left-col .panel:first-child,
-body.mode-edit .right-col {
+body.mode-edit .left-col .panel:first-child {
   display: flex;
 }
 body.mode-edit .left-col .panel:last-child {
   display: none;
 }
-body.mode-preview .left-col .panel:first-child,
-body.mode-preview .right-col {
-  display: none;
+body.mode-edit .right-col {
+  display: flex;
 }
 
-body.mode-preview main {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+body.mode-preview .left-col .panel:first-child {
+  display: none;
 }
+body.mode-preview .left-col .panel:last-child {
+  display: flex;
+}
+body.mode-preview .right-col {
+  display: flex;
+}
+
 body.mode-preview .left-col {
   max-width: 900px;
   width: 100%;
