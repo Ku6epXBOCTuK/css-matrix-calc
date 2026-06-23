@@ -176,40 +176,40 @@
     return pt.matrixTransform(svg.getScreenCTM().inverse());
   }
 
-  function onPointerDown(e) {
+  function updateDragPosition(e) {
+    if (dragIndex < 0) return;
+    e.preventDefault();
+    const pt = svgPoint(e.clientX, e.clientY);
+    state.corners[dragIndex].x = Math.round(Math.max(0, Math.min(state.fieldW, pt.x)));
+    state.corners[dragIndex].y = Math.round(Math.max(0, Math.min(state.fieldH, pt.y)));
+
+    const circles = svg.querySelectorAll('.corner-circle');
+    const c = state.corners[dragIndex];
+    circles[dragIndex].setAttribute('cx', c.x);
+    circles[dragIndex].setAttribute('cy', c.y);
+
+    const poly = svg.querySelector('polygon');
+    const pts = state.corners.map(p => `${p.x},${p.y}`).join(' ');
+    poly.setAttribute('points', pts);
+  }
+
+  function endDrag() {
+    dragIndex = -1;
+    svg.classList.remove('dragging');
+    document.removeEventListener('pointermove', updateDragPosition);
+    document.removeEventListener('pointerup', endDrag);
+    updateAll();
+  }
+
+  svg.addEventListener('pointerdown', (e) => {
     const target = e.target.closest('.corner-circle');
     if (!target) return;
     e.preventDefault();
     dragIndex = parseInt(target.dataset.index);
-    target.classList.add('dragging');
-    document.addEventListener('mousemove', onPointerMove);
-    document.addEventListener('mouseup', onPointerUp);
-    document.addEventListener('touchmove', onPointerMove, { passive: false });
-    document.addEventListener('touchend', onPointerUp);
-  }
-
-  function onPointerMove(e) {
-    if (dragIndex < 0) return;
-    e.preventDefault();
-    const cx = e.touches ? e.touches[0].clientX : e.clientX;
-    const cy = e.touches ? e.touches[0].clientY : e.clientY;
-    const pt = svgPoint(cx, cy);
-    state.corners[dragIndex].x = Math.round(Math.max(0, Math.min(state.fieldW, pt.x)));
-    state.corners[dragIndex].y = Math.round(Math.max(0, Math.min(state.fieldH, pt.y)));
-    updateAll();
-  }
-
-  function onPointerUp() {
-    dragIndex = -1;
-    document.querySelectorAll('.corner-circle.dragging').forEach(el => el.classList.remove('dragging'));
-    document.removeEventListener('mousemove', onPointerMove);
-    document.removeEventListener('mouseup', onPointerUp);
-    document.removeEventListener('touchmove', onPointerMove);
-    document.removeEventListener('touchend', onPointerUp);
-  }
-
-  svg.addEventListener('mousedown', onPointerDown);
-  svg.addEventListener('touchstart', onPointerDown, { passive: false });
+    svg.classList.add('dragging');
+    document.addEventListener('pointermove', updateDragPosition);
+    document.addEventListener('pointerup', endDrag);
+  });
 
   // ===== Live preview =====
   function updateLivePreview() {
