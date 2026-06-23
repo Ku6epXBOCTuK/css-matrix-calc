@@ -28,7 +28,7 @@ export function computeHomography(state) {
 }
 
 export function toMatrix3dCSS(H) {
-  if (!H) return '/* вырожденная конфигурация */';
+  if (!H) return '/* degenerate configuration */';
   const n = v => parseFloat(v.toFixed(8));
   return [
     'transform-origin: 0 0;',

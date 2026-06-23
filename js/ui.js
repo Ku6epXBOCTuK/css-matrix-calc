@@ -50,8 +50,8 @@ function setMode(mode) {
   $('btnEdit').classList.toggle('active', mode === 'edit');
   $('btnPreview').classList.toggle('active', mode === 'preview');
   $('modeHint').textContent = mode === 'edit'
-    ? 'Перетаскивайте углы на поле'
-    : 'Результат matrix3d() трансформации';
+    ? 'Drag corners on the field'
+    : 'matrix3d() transform result';
 }
 
 export function updateCSSOutput(state) {
@@ -139,7 +139,7 @@ export function initUI(state, updateAll) {
     navigator.clipboard.writeText(text).then(() => {
       const btn = $('copyBtn');
       const orig = btn.textContent;
-      btn.textContent = 'Скопировано!';
+      btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = orig, 1500);
     });
   });
