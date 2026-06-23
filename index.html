@@ -37,10 +37,34 @@
 
       <div class="right-col">
         <div class="panel">
-          <h2>Основное поле</h2>
-          <div class="field-row">
-            <label><span>W</span><input id="inpFieldW" type="number" value="1920" min="1" /></label>
-            <label><span>H</span><input id="inpFieldH" type="number" value="1080" min="1" /></label>
+          <div class="panel-header">
+            <h2>Основное поле</h2>
+            <button class="btn btn-edit-field" id="btnEditField">Редактировать</button>
+          </div>
+          <div class="field-size-stack">
+            <div class="chain-link" id="chainLink" title="Keep aspect ratio">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path class="chain-locked" d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path class="chain-locked" d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                <path class="chain-unlocked" d="M13.5 10.5l3-3" style="display:none" />
+                <path class="chain-unlocked" d="M10.5 13.5l-3 3" style="display:none" />
+                <path class="chain-unlocked" d="M7.5 7.5l9 9" style="display:none" />
+              </svg>
+            </div>
+            <div class="field-stack-inputs">
+              <label><span>W</span><input id="inpFieldW" type="number" value="1920" min="1" disabled /></label>
+              <label><span>H</span><input id="inpFieldH" type="number" value="1080" min="1" disabled /></label>
+            </div>
+          </div>
+          <div class="field-edit-options" id="fieldEditOptions">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chkRescaleCoords" checked />
+              <span>Пересчитать координаты</span>
+            </label>
+            <div class="field-save-row">
+              <button class="btn btn-cancel-field" id="btnCancelField">Отменить</button>
+              <button class="btn btn-save-field" id="btnSaveField">Сохранить</button>
+            </div>
           </div>
         </div>
 
