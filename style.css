@@ -66,7 +66,9 @@ header p {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .mode-btn:hover {
   color: var(--text);
@@ -81,6 +83,7 @@ header p {
   color: var(--accent);
   font-weight: 500;
   margin-right: 8px;
+  margin-left: auto;
   white-space: nowrap;
 }
 
@@ -294,7 +297,9 @@ main {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .btn-edit-field:hover {
   background: rgba(88, 166, 255, 0.1);
@@ -348,7 +353,9 @@ main {
   color: var(--accent);
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .chain-link:hover {
   background: rgba(88, 166, 255, 0.1);
