@@ -29,6 +29,10 @@ body {
 header {
   padding: 16px 24px;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 header h1 {
   font-size: 18px;
@@ -39,6 +43,37 @@ header p {
   font-size: 13px;
   color: #8b949e;
   margin-top: 4px;
+}
+
+.header-left {
+  min-width: 0;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mode-btn {
+  padding: 6px 18px;
+  border: none;
+  background: var(--panel);
+  color: #8b949e;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.mode-btn:hover {
+  color: var(--text);
+}
+.mode-btn.active {
+  background: var(--accent);
+  color: #fff;
 }
 
 main {
@@ -279,6 +314,28 @@ main {
   color: #f85149;
   font-size: 12px;
   font-style: italic;
+}
+
+body.mode-edit .left-col .panel:first-child,
+body.mode-edit .right-col {
+  display: flex;
+}
+body.mode-edit .left-col .panel:last-child {
+  display: none;
+}
+body.mode-preview .left-col .panel:first-child,
+body.mode-preview .right-col {
+  display: none;
+}
+
+body.mode-preview main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+body.mode-preview .left-col {
+  max-width: 900px;
+  width: 100%;
 }
 
 @media (max-width: 900px) {

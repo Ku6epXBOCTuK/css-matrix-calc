@@ -342,7 +342,19 @@
   // ===== Resize =====
   window.addEventListener('resize', updateLivePreview);
 
+  // ===== Mode toggle =====
+  function setMode(mode) {
+    document.body.className = mode === 'preview' ? 'mode-preview' : 'mode-edit';
+    $('btnEdit').classList.toggle('active', mode === 'edit');
+    $('btnPreview').classList.toggle('active', mode === 'preview');
+    requestAnimationFrame(updateLivePreview);
+  }
+
+  $('btnEdit').addEventListener('click', () => setMode('edit'));
+  $('btnPreview').addEventListener('click', () => setMode('preview'));
+
   // ===== Init =====
+  setMode('edit');
   buildCornerInputs();
   updateAll();
 })();
