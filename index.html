@@ -1,74 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSS Matrix3D Perspective Calculator</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <div class="header-left">
-      <h1>CSS Matrix3D Perspective Calculator</h1>
-      <p>Задайте 4 точки на поле и размер виджета — получите CSS matrix3d() для перспективного отображения</p>
-    </div>
-    <div class="mode-toggle">
-      <button class="mode-btn active" id="btnEdit">Edit</button>
-      <button class="mode-btn" id="btnPreview">Preview</button>
-    </div>
-  </header>
-
-  <main>
-    <div class="left-col">
-      <div class="panel">
-        <h2>Preview — перетаскивайте углы</h2>
-        <svg id="svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet"></svg>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Matrix3D Perspective Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <h1>CSS Matrix3D Perspective Calculator</h1>
+        <p>Задайте 4 точки на поле и размер виджета — получите CSS matrix3d() для перспективного отображения</p>
       </div>
-      <div class="panel">
-        <h2>Live Preview</h2>
-        <div id="fieldContainer">
-          <div id="field">
-            <div id="widget">
-              <span>WIDGET</span>
+      <span class="mode-hint" id="modeHint">Перетаскивайте углы на поле</span>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btnEdit">Edit</button>
+        <button class="mode-btn" id="btnPreview">Preview</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="left-col">
+        <div class="panel">
+          <svg id="svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="panel">
+          <div id="fieldContainer">
+            <div id="field">
+              <div id="widget">
+                <span>WIDGET</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="right-col">
-      <div class="panel">
-        <h2>Основное поле</h2>
-        <div class="field-row">
-          <label><span>W</span><input id="inpFieldW" type="number" value="1920" min="1"></label>
-          <label><span>H</span><input id="inpFieldH" type="number" value="1080" min="1"></label>
+      <div class="right-col">
+        <div class="panel">
+          <h2>Основное поле</h2>
+          <div class="field-row">
+            <label><span>W</span><input id="inpFieldW" type="number" value="1920" min="1" /></label>
+            <label><span>H</span><input id="inpFieldH" type="number" value="1080" min="1" /></label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Виджет</h2>
+          <div class="field-row">
+            <label><span>W</span><input id="inpWidgetW" type="number" value="400" min="1" /></label>
+            <label><span>H</span><input id="inpWidgetH" type="number" value="300" min="1" /></label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Углы четырёхугольника</h2>
+          <div class="corner-inputs" id="cornerInputs"></div>
+        </div>
+
+        <div class="panel">
+          <h2>CSS Output</h2>
+          <textarea id="cssOutput" readonly></textarea>
+          <div class="btn-row">
+            <button class="btn btn-copy" id="copyBtn">Копировать CSS</button>
+            <button class="btn btn-reset" id="resetBtn">Сброс</button>
+          </div>
         </div>
       </div>
+    </main>
 
-      <div class="panel">
-        <h2>Виджет</h2>
-        <div class="field-row">
-          <label><span>W</span><input id="inpWidgetW" type="number" value="400" min="1"></label>
-          <label><span>H</span><input id="inpWidgetH" type="number" value="300" min="1"></label>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>Углы четырёхугольника</h2>
-        <div class="corner-inputs" id="cornerInputs"></div>
-      </div>
-
-      <div class="panel">
-        <h2>CSS Output</h2>
-        <textarea id="cssOutput" readonly></textarea>
-        <div class="btn-row">
-          <button class="btn btn-copy" id="copyBtn">Копировать CSS</button>
-          <button class="btn btn-reset" id="resetBtn">Сброс</button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

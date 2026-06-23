@@ -76,6 +76,14 @@ header p {
   color: #fff;
 }
 
+.mode-hint {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
 main {
   display: grid;
   grid-template-columns: 1fr 340px;

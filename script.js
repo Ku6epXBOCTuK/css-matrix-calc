@@ -347,6 +347,9 @@
     document.body.className = mode === 'preview' ? 'mode-preview' : 'mode-edit';
     $('btnEdit').classList.toggle('active', mode === 'edit');
     $('btnPreview').classList.toggle('active', mode === 'preview');
+    $('modeHint').textContent = mode === 'edit'
+      ? 'Перетаскивайте углы на поле'
+      : 'Результат matrix3d() трансформации';
     requestAnimationFrame(updateLivePreview);
   }
 
