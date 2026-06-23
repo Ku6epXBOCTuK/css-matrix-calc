@@ -6,7 +6,7 @@ A browser-based tool for generating CSS `matrix3d()` transforms with perspective
 
 ## Usage
 
-Open `index.html` in a browser (no build step required).
+[Open in browser](https://ku6epxboctuk.is-a.dev/css-matrix-calc/) — no build step required.
 
 - **Edit** — drag corners on the SVG field, adjust field and widget sizes
 - **Preview** — see the live matrix3d() transform result
