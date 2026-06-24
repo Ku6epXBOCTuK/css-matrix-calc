@@ -217,16 +217,49 @@ export function initUI(state, updateAll) {
   });
 
   const lc = document.querySelector('.left-col');
+
+  document.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    document.body.classList.add('file-dragging');
+  });
+
+  document.addEventListener('drop', () => {
+    document.body.classList.remove('file-dragging');
+    lc.classList.remove('drag-over');
+  });
+
   lc.addEventListener('dragover', (e) => {
     e.preventDefault();
     lc.classList.add('drag-over');
   });
-  lc.addEventListener('dragleave', () => {
-    lc.classList.remove('drag-over');
+
+  lc.addEventListener('dragleave', (e) => {
+    if (!lc.contains(e.relatedTarget)) {
+      lc.classList.remove('drag-over');
+    }
   });
+
   lc.addEventListener('drop', (e) => {
     e.preventDefault();
+    document.body.classList.remove('file-dragging');
     lc.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) loadBgFile(e.dataTransfer.files[0], state);
+  });
+
+  const bp = $('bgPanel');
+  bp.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    bp.classList.add('drag-over');
+  });
+  bp.addEventListener('dragleave', (e) => {
+    if (!bp.contains(e.relatedTarget)) {
+      bp.classList.remove('drag-over');
+    }
+  });
+  bp.addEventListener('drop', (e) => {
+    e.preventDefault();
+    document.body.classList.remove('file-dragging');
+    bp.classList.remove('drag-over');
     if (e.dataTransfer.files[0]) loadBgFile(e.dataTransfer.files[0], state);
   });
 }

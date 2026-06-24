@@ -142,6 +142,10 @@ main {
   touch-action: none;
 }
 
+#svg image {
+  transition: opacity 0.15s;
+}
+
 .corner-circle {
   cursor: grab;
   filter: drop-shadow(0 0 4px rgba(88, 166, 255, 0.5));
@@ -454,6 +458,39 @@ main {
   background-color: #0c1018;
   background-repeat: no-repeat;
   background-position: center;
+  transition: opacity 0.15s;
+}
+
+body.file-dragging #field {
+  opacity: 0.1;
+}
+
+body.file-dragging #svg image {
+  opacity: 0.1;
+}
+
+body.file-dragging .left-col {
+  outline: 3px dashed rgba(88, 166, 255, 0.9);
+  outline-offset: -3px;
+  border-radius: 8px;
+}
+
+body.file-dragging .left-col.drag-over {
+  outline: 5px dashed var(--accent);
+  outline-offset: -5px;
+  border-radius: 8px;
+  background: rgba(88, 166, 255, 0.15);
+}
+
+body.file-dragging #bgPanel {
+  outline: 2px dashed rgba(88, 166, 255, 0.7);
+  outline-offset: -2px;
+}
+
+body.file-dragging #bgPanel.drag-over {
+  outline: 3px dashed var(--accent);
+  outline-offset: -3px;
+  background: rgba(88, 166, 255, 0.08);
 }
 
 #widget {
