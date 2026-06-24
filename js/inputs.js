@@ -1,6 +1,5 @@
-const LABELS = ['TL', 'TR', 'BR', 'BL'];
-
-function $(id) { return document.getElementById(id); }
+import { $ } from './dom.js';
+import { LABELS } from './constants.js';
 
 export function buildCornerInputs(state) {
   const container = $('cornerInputs');
@@ -28,8 +27,14 @@ export function syncCornerInputs(state) {
 
 export function readCornerInputs(state) {
   state.corners.forEach((c, i) => {
-    const x = parseInt($(`c${i}x`).value);
-    const y = parseInt($(`c${i}y`).value);
+    const xi = $(`c${i}x`);
+    const yi = $(`c${i}y`);
+    const x = parseInt(xi.value);
+    const y = parseInt(yi.value);
+
+    xi.classList.toggle('input-error', isNaN(x));
+    yi.classList.toggle('input-error', isNaN(y));
+
     if (!isNaN(x)) c.x = x;
     if (!isNaN(y)) c.y = y;
   });

@@ -1,3 +1,5 @@
+import { round } from './constants.js';
+
 export function computeHomography(state) {
   const w = state.widgetW, h = state.widgetH;
   if (w <= 0 || h <= 0) return null;
@@ -29,14 +31,13 @@ export function computeHomography(state) {
 
 export function toMatrix3dCSS(H) {
   if (!H) return '/* degenerate configuration */';
-  const n = v => parseFloat(v.toFixed(8));
   return [
     'transform-origin: 0 0;',
     'transform: matrix3d(',
-    `  ${n(H.h00)}, ${n(H.h10)}, 0, ${n(H.h20)},`,
-    `  ${n(H.h01)}, ${n(H.h11)}, 0, ${n(H.h21)},`,
+    `  ${round(H.h00)}, ${round(H.h10)}, 0, ${round(H.h20)},`,
+    `  ${round(H.h01)}, ${round(H.h11)}, 0, ${round(H.h21)},`,
     `  0, 0, 1, 0,`,
-    `  ${n(H.h02)}, ${n(H.h12)}, 0, ${n(H.h22)}`,
+    `  ${round(H.h02)}, ${round(H.h12)}, 0, ${round(H.h22)}`,
     ');'
   ].join('\n');
 }

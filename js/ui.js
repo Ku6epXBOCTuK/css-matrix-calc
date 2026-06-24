@@ -1,77 +1,11 @@
+import { $ } from './dom.js';
 import { resetState } from './state.js';
 import { computeHomography, toMatrix3dCSS } from './homography.js';
 import { buildCornerInputs, syncCornerInputs, readCornerInputs, syncFieldInputs, syncWidgetInputs } from './inputs.js';
 import { updateLivePreview } from './preview.js';
-
-function $(id) { return document.getElementById(id); }
-
-let fieldEditing = false;
-let fieldEditW, fieldEditH;
-let keepAspect = true;
-
-function updateChainIcon() {
-  const locked = $('chainLink').querySelectorAll('.chain-locked');
-  const unlocked = $('chainLink').querySelectorAll('.chain-unlocked');
-  locked.forEach(el => el.style.display = keepAspect ? '' : 'none');
-  unlocked.forEach(el => el.style.display = keepAspect ? 'none' : '');
-  $('chainLink').classList.toggle('unlocked', !keepAspect);
-}
-
-function setFieldEditing(editing, state) {
-  fieldEditing = editing;
-  const inpW = $('inpFieldW');
-  const inpH = $('inpFieldH');
-  const options = $('fieldEditOptions');
-  const btnEdit = $('btnEditField');
-  const chain = $('chainLink');
-
-  if (editing) {
-    fieldEditW = state.fieldW;
-    fieldEditH = state.fieldH;
-    inpW.disabled = false;
-    inpH.disabled = false;
-    options.classList.add('visible');
-    btnEdit.style.display = 'none';
-    chain.classList.add('visible');
-    updateChainIcon();
-  } else {
-    inpW.value = state.fieldW;
-    inpW.disabled = true;
-    inpH.value = state.fieldH;
-    inpH.disabled = true;
-    options.classList.remove('visible');
-    btnEdit.style.display = '';
-    chain.classList.remove('visible');
-  }
-}
-
-function setMode(mode) {
-  document.body.className = mode === 'preview' ? 'mode-preview' : 'mode-edit';
-  $('btnEdit').classList.toggle('active', mode === 'edit');
-  $('btnPreview').classList.toggle('active', mode === 'preview');
-  $('modeHint').textContent = mode === 'edit'
-    ? 'Drag corners on the field'
-    : 'matrix3d() transform result';
-}
-
-let updateAllRef;
-
-function loadBgFile(file, state) {
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    state.bgImage = reader.result;
-    $('btnBgRemove').style.display = '';
-    updateAllRef();
-  };
-  reader.readAsDataURL(file);
-}
-
-function clearBg(state) {
-  state.bgImage = null;
-  $('btnBgRemove').style.display = 'none';
-  updateAllRef();
-}
+import { setFieldEditing, setMode, toggleKeepAspect, isFieldEditing, getFieldEditW, getFieldEditH, setFieldEditW, setFieldEditH, isKeepAspect } from './mode.js';
+import { setUpdateAllRef, loadBgFile, clearBg, loadWidgetFile, setWidgetImageLock } from './file-loader.js';
+import { initDropZones } from './drop-zone.js';
 
 export function updateCSSOutput(state) {
   const H = computeHomography(state);
@@ -79,11 +13,10 @@ export function updateCSSOutput(state) {
 }
 
 export function initUI(state, updateAll) {
-  updateAllRef = updateAll;
+  setUpdateAllRef(updateAll);
 
   $('chainLink').addEventListener('click', () => {
-    keepAspect = !keepAspect;
-    updateChainIcon();
+    toggleKeepAspect();
   });
 
   $('btnEditField').addEventListener('click', () => {
@@ -96,25 +29,27 @@ export function initUI(state, updateAll) {
   });
 
   $('inpFieldW').addEventListener('input', () => {
-    if (!fieldEditing) return;
+    if (!isFieldEditing()) return;
     const newW = parseInt($('inpFieldW').value);
     if (newW <= 0) return;
-    if (keepAspect) {
-      fieldEditH = Math.round(newW * state.fieldH / state.fieldW);
-      $('inpFieldH').value = fieldEditH;
+    if (isKeepAspect()) {
+      const newH = Math.round(newW * state.fieldH / state.fieldW);
+      $('inpFieldH').value = newH;
+      setFieldEditH(newH);
     }
-    fieldEditW = newW;
+    setFieldEditW(newW);
   });
 
   $('inpFieldH').addEventListener('input', () => {
-    if (!fieldEditing) return;
+    if (!isFieldEditing()) return;
     const newH = parseInt($('inpFieldH').value);
     if (newH <= 0) return;
-    if (keepAspect) {
-      fieldEditW = Math.round(newH * state.fieldW / state.fieldH);
-      $('inpFieldW').value = fieldEditW;
+    if (isKeepAspect()) {
+      const newW = Math.round(newH * state.fieldW / state.fieldH);
+      $('inpFieldW').value = newW;
+      setFieldEditW(newW);
     }
-    fieldEditH = newH;
+    setFieldEditH(newH);
   });
 
   $('btnSaveField').addEventListener('click', () => {
@@ -207,35 +142,10 @@ export function initUI(state, updateAll) {
     updateAll();
   });
 
-  function setWidgetImageLock(locked) {
-    $('inpWidgetW').disabled = locked;
-    $('inpWidgetH').disabled = locked;
-    $('btnWidgetRemove').style.display = locked ? '' : 'none';
-  }
-
-  function loadWidgetFile(file) {
-    if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      state.widgetImage = reader.result;
-      const img = new Image();
-      img.onload = () => {
-        state.widgetW = img.naturalWidth;
-        state.widgetH = img.naturalHeight;
-        $('inpWidgetW').value = state.widgetW;
-        $('inpWidgetH').value = state.widgetH;
-        setWidgetImageLock(true);
-        updateAll();
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
   $('btnWidgetLoad').addEventListener('click', () => $('widgetFileInput').click());
 
   $('widgetFileInput').addEventListener('change', (e) => {
-    if (e.target.files[0]) loadWidgetFile(e.target.files[0]);
+    if (e.target.files[0]) loadWidgetFile(e.target.files[0], state);
     e.target.value = '';
   });
 
@@ -251,7 +161,7 @@ export function initUI(state, updateAll) {
     for (const item of items) {
       if (item.type.startsWith('image/')) {
         const file = item.getAsFile();
-        if (file) loadWidgetFile(file);
+        if (file) loadWidgetFile(file, state);
         break;
       }
     }
@@ -272,67 +182,5 @@ export function initUI(state, updateAll) {
     }
   });
 
-  const lc = document.querySelector('.left-col');
-
-  document.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    document.body.classList.add('file-dragging');
-  });
-
-  document.addEventListener('drop', () => {
-    document.body.classList.remove('file-dragging');
-    lc.classList.remove('drag-over');
-  });
-
-  lc.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    lc.classList.add('drag-over');
-  });
-
-  lc.addEventListener('dragleave', (e) => {
-    if (!lc.contains(e.relatedTarget)) {
-      lc.classList.remove('drag-over');
-    }
-  });
-
-  lc.addEventListener('drop', (e) => {
-    e.preventDefault();
-    document.body.classList.remove('file-dragging');
-    lc.classList.remove('drag-over');
-    if (e.dataTransfer.files[0]) loadBgFile(e.dataTransfer.files[0], state);
-  });
-
-  const bp = $('bgPanel');
-  bp.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    bp.classList.add('drag-over');
-  });
-  bp.addEventListener('dragleave', (e) => {
-    if (!bp.contains(e.relatedTarget)) {
-      bp.classList.remove('drag-over');
-    }
-  });
-  bp.addEventListener('drop', (e) => {
-    e.preventDefault();
-    document.body.classList.remove('file-dragging');
-    bp.classList.remove('drag-over');
-    if (e.dataTransfer.files[0]) loadBgFile(e.dataTransfer.files[0], state);
-  });
-
-  const wp = $('widgetPanel');
-  wp.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    wp.classList.add('drag-over');
-  });
-  wp.addEventListener('dragleave', (e) => {
-    if (!wp.contains(e.relatedTarget)) {
-      wp.classList.remove('drag-over');
-    }
-  });
-  wp.addEventListener('drop', (e) => {
-    e.preventDefault();
-    document.body.classList.remove('file-dragging');
-    wp.classList.remove('drag-over');
-    if (e.dataTransfer.files[0]) loadWidgetFile(e.dataTransfer.files[0]);
-  });
+  initDropZones(state);
 }
