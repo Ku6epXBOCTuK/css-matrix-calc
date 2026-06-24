@@ -54,12 +54,33 @@ function setMode(mode) {
     : 'matrix3d() transform result';
 }
 
+let updateAllRef;
+
+function loadBgFile(file, state) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    state.bgImage = reader.result;
+    $('btnBgRemove').style.display = '';
+    updateAllRef();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearBg(state) {
+  state.bgImage = null;
+  $('btnBgRemove').style.display = 'none';
+  updateAllRef();
+}
+
 export function updateCSSOutput(state) {
   const H = computeHomography(state);
   $('cssOutput').value = toMatrix3dCSS(H);
 }
 
 export function initUI(state, updateAll) {
+  updateAllRef = updateAll;
+
   $('chainLink').addEventListener('click', () => {
     keepAspect = !keepAspect;
     updateChainIcon();
@@ -150,6 +171,8 @@ export function initUI(state, updateAll) {
     syncFieldInputs(state, state.fieldW, state.fieldH);
     syncWidgetInputs(state);
     buildCornerInputs(state);
+    $('btnBgRemove').style.display = 'none';
+    $('bgObjectFit').value = state.objectFit;
     updateAll();
   });
 
@@ -164,4 +187,46 @@ export function initUI(state, updateAll) {
   });
 
   window.addEventListener('resize', () => updateLivePreview(state));
+
+  $('btnBgLoad').addEventListener('click', () => $('bgFileInput').click());
+
+  $('bgFileInput').addEventListener('change', (e) => {
+    if (e.target.files[0]) loadBgFile(e.target.files[0], state);
+    e.target.value = '';
+  });
+
+  $('btnBgRemove').addEventListener('click', () => clearBg(state));
+
+  $('bgObjectFit').addEventListener('change', (e) => {
+    state.objectFit = e.target.value;
+    updateAll();
+  });
+
+  document.addEventListener('paste', (e) => {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) loadBgFile(file, state);
+        break;
+      }
+    }
+  });
+
+  const lc = document.querySelector('.left-col');
+  lc.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    lc.classList.add('drag-over');
+  });
+  lc.addEventListener('dragleave', () => {
+    lc.classList.remove('drag-over');
+  });
+  lc.addEventListener('drop', (e) => {
+    e.preventDefault();
+    lc.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) loadBgFile(e.dataTransfer.files[0], state);
+  });
 }

@@ -440,12 +440,20 @@ main {
   position: relative;
 }
 
+.left-col.drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
 #field {
   position: absolute;
   top: 0;
   left: 0;
   transform-origin: 0 0;
-  background: #0c1018;
+  background-color: #0c1018;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #widget {
@@ -505,6 +513,27 @@ body.mode-preview .right-col {
 
 body.mode-preview .left-col {
   width: 100%;
+}
+
+.bg-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#bgObjectFit {
+  padding: 4px 8px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--heading);
+  font-size: 13px;
+  font-family: monospace;
+  outline: none;
+  cursor: pointer;
+}
+#bgObjectFit:focus {
+  border-color: var(--accent);
 }
 
 @media (max-width: 900px) {

@@ -2,6 +2,16 @@ import { computeHomography } from './homography.js';
 
 function $(id) { return document.getElementById(id); }
 
+function applyBgToField(field, state) {
+  if (state.bgImage) {
+    field.style.backgroundImage = `url(${state.bgImage})`;
+    field.style.backgroundSize = state.objectFit === 'fill' ? '100% 100%' : state.objectFit;
+  } else {
+    field.style.backgroundImage = 'none';
+    field.style.backgroundSize = '';
+  }
+}
+
 export function updateLivePreview(state) {
   const container = $('fieldContainer');
   const cw = container.clientWidth;
@@ -17,6 +27,8 @@ export function updateLivePreview(state) {
   field.style.height = state.fieldH + 'px';
   field.style.transform = `scale(${scale})`;
   container.style.height = (state.fieldH * scale) + 'px';
+
+  applyBgToField(field, state);
 
   const widget = $('widget');
   widget.style.width = state.widgetW + 'px';

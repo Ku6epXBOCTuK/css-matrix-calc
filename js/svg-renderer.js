@@ -1,6 +1,14 @@
 const LABELS = ['TL', 'TR', 'BR', 'BL'];
 const ns = 'http://www.w3.org/2000/svg';
 
+const OBJECT_FIT_MAP = {
+  contain: 'xMidYMid meet',
+  cover: 'xMidYMid slice',
+  fill: 'none',
+  none: 'xMinYMin meet',
+  'scale-down': 'xMidYMid meet'
+};
+
 function gridInterval(maxDim) {
   if (maxDim <= 500) return 50;
   if (maxDim <= 1000) return 100;
@@ -25,6 +33,17 @@ export function renderSVG(svg, state) {
     fill: '#0a0e14'
   });
   svg.appendChild(rect);
+
+  if (state.bgImage) {
+    const img = document.createElementNS(ns, 'image');
+    setAttrs(img, {
+      href: state.bgImage,
+      width: state.fieldW,
+      height: state.fieldH,
+      preserveAspectRatio: OBJECT_FIT_MAP[state.objectFit] || 'xMidYMid meet'
+    });
+    svg.appendChild(img);
+  }
 
   const step = gridInterval(Math.max(state.fieldW, state.fieldH));
   const gridG = document.createElementNS(ns, 'g');

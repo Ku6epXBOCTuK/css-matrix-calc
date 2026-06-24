@@ -6,7 +6,9 @@ export const defaultState = {
     { x: 1620, y: 150 },
     { x: 1580, y: 920 },
     { x: 340, y: 950 }
-  ]
+  ],
+  bgImage: null,
+  objectFit: 'contain'
 };
 
 export const state = {
@@ -17,7 +19,9 @@ export const state = {
     { x: 1620, y: 150 },
     { x: 1580, y: 920 },
     { x: 340, y: 950 }
-  ]
+  ],
+  bgImage: null,
+  objectFit: 'contain'
 };
 
 export function resetState() {
@@ -25,6 +29,8 @@ export function resetState() {
   state.fieldH = defaultState.fieldH;
   state.widgetW = defaultState.widgetW;
   state.widgetH = defaultState.widgetH;
+  state.bgImage = null;
+  state.objectFit = defaultState.objectFit;
   defaultState.corners.forEach((c, i) => {
     state.corners[i] = { x: c.x, y: c.y };
   });

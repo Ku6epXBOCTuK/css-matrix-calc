@@ -78,6 +78,22 @@
         </div>
 
         <div class="panel">
+          <h2>Background</h2>
+          <div class="bg-controls">
+            <input type="file" id="bgFileInput" accept="image/*" hidden />
+            <button class="btn btn-edit-field" id="btnBgLoad">Load Image</button>
+            <button class="btn btn-cancel-field" id="btnBgRemove" style="display:none">Remove</button>
+            <select id="bgObjectFit">
+              <option value="contain">contain</option>
+              <option value="cover">cover</option>
+              <option value="fill">fill</option>
+              <option value="none">none</option>
+              <option value="scale-down">scale-down</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="panel">
           <h2>Widget</h2>
           <div class="field-row">
             <label><span>W</span><input id="inpWidgetW" type="number" value="400" min="1" /></label>
