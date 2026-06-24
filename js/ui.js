@@ -139,11 +139,13 @@ export function initUI(state, updateAll) {
   });
 
   $('inpWidgetW').addEventListener('input', () => {
+    if (state.widgetImage) return;
     const v = parseInt($('inpWidgetW').value);
     if (v > 0) { state.widgetW = v; updateAll(); }
   });
 
   $('inpWidgetH').addEventListener('input', () => {
+    if (state.widgetImage) return;
     const v = parseInt($('inpWidgetH').value);
     if (v > 0) { state.widgetH = v; updateAll(); }
   });
@@ -173,6 +175,9 @@ export function initUI(state, updateAll) {
     buildCornerInputs(state);
     $('btnBgRemove').style.display = 'none';
     $('bgObjectFit').value = state.objectFit;
+    $('inpWidgetW').disabled = false;
+    $('inpWidgetH').disabled = false;
+    $('btnWidgetRemove').style.display = 'none';
     updateAll();
   });
 
@@ -202,7 +207,58 @@ export function initUI(state, updateAll) {
     updateAll();
   });
 
+  function setWidgetImageLock(locked) {
+    $('inpWidgetW').disabled = locked;
+    $('inpWidgetH').disabled = locked;
+    $('btnWidgetRemove').style.display = locked ? '' : 'none';
+  }
+
+  function loadWidgetFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      state.widgetImage = reader.result;
+      const img = new Image();
+      img.onload = () => {
+        state.widgetW = img.naturalWidth;
+        state.widgetH = img.naturalHeight;
+        $('inpWidgetW').value = state.widgetW;
+        $('inpWidgetH').value = state.widgetH;
+        setWidgetImageLock(true);
+        updateAll();
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $('btnWidgetLoad').addEventListener('click', () => $('widgetFileInput').click());
+
+  $('widgetFileInput').addEventListener('change', (e) => {
+    if (e.target.files[0]) loadWidgetFile(e.target.files[0]);
+    e.target.value = '';
+  });
+
+  $('btnWidgetRemove').addEventListener('click', () => {
+    state.widgetImage = null;
+    setWidgetImageLock(false);
+    updateAll();
+  });
+
+  $('widgetPasteInput').addEventListener('paste', (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) loadWidgetFile(file);
+        break;
+      }
+    }
+  });
+
   document.addEventListener('paste', (e) => {
+    if (document.activeElement?.id === 'widgetPasteInput') return;
     const tag = document.activeElement?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
     const items = e.clipboardData?.items;
@@ -261,5 +317,22 @@ export function initUI(state, updateAll) {
     document.body.classList.remove('file-dragging');
     bp.classList.remove('drag-over');
     if (e.dataTransfer.files[0]) loadBgFile(e.dataTransfer.files[0], state);
+  });
+
+  const wp = $('widgetPanel');
+  wp.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    wp.classList.add('drag-over');
+  });
+  wp.addEventListener('dragleave', (e) => {
+    if (!wp.contains(e.relatedTarget)) {
+      wp.classList.remove('drag-over');
+    }
+  });
+  wp.addEventListener('drop', (e) => {
+    e.preventDefault();
+    document.body.classList.remove('file-dragging');
+    wp.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) loadWidgetFile(e.dataTransfer.files[0]);
   });
 }

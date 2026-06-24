@@ -12,6 +12,22 @@ function applyBgToField(field, state) {
   }
 }
 
+function applyWidgetImage(widget, state) {
+  if (state.widgetImage) {
+    widget.style.backgroundImage = `url(${state.widgetImage})`;
+    widget.style.backgroundSize = '100% 100%';
+    widget.style.backgroundPosition = 'center';
+    widget.style.backgroundRepeat = 'no-repeat';
+    widget.querySelector('span').style.display = 'none';
+  } else {
+    widget.style.backgroundImage = '';
+    widget.style.backgroundSize = '';
+    widget.style.backgroundPosition = '';
+    widget.style.backgroundRepeat = '';
+    widget.querySelector('span').style.display = '';
+  }
+}
+
 export function updateLivePreview(state) {
   const container = $('fieldContainer');
   const cw = container.clientWidth;
@@ -33,6 +49,8 @@ export function updateLivePreview(state) {
   const widget = $('widget');
   widget.style.width = state.widgetW + 'px';
   widget.style.height = state.widgetH + 'px';
+
+  applyWidgetImage(widget, state);
 
   const H = computeHomography(state);
   if (H) {

@@ -93,12 +93,18 @@
           </div>
         </div>
 
-        <div class="panel">
+        <div class="panel" id="widgetPanel">
           <h2>Widget</h2>
           <div class="field-row">
             <label><span>W</span><input id="inpWidgetW" type="number" value="400" min="1" /></label>
             <label><span>H</span><input id="inpWidgetH" type="number" value="300" min="1" /></label>
           </div>
+          <div class="widget-img-controls">
+            <input type="file" id="widgetFileInput" accept="image/*" hidden />
+            <button class="btn btn-edit-field" id="btnWidgetLoad">Load Image</button>
+            <button class="btn btn-cancel-field" id="btnWidgetRemove" style="display:none">Remove</button>
+          </div>
+          <input id="widgetPasteInput" type="text" class="widget-paste-input" placeholder="Ctrl+V to paste image" readonly />
         </div>
 
         <div class="panel">

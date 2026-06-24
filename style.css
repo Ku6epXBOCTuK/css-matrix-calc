@@ -406,6 +406,11 @@ main {
   cursor: not-allowed;
 }
 
+.field-row input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .field-edit-options {
   display: none;
   margin-top: 10px;
@@ -493,6 +498,17 @@ body.file-dragging #bgPanel.drag-over {
   background: rgba(88, 166, 255, 0.08);
 }
 
+body.file-dragging #widgetPanel {
+  outline: 2px dashed rgba(88, 166, 255, 0.7);
+  outline-offset: -2px;
+}
+
+body.file-dragging #widgetPanel.drag-over {
+  outline: 3px dashed var(--accent);
+  outline-offset: -3px;
+  background: rgba(88, 166, 255, 0.08);
+}
+
 #widget {
   position: absolute;
   top: 0;
@@ -556,6 +572,31 @@ body.mode-preview .left-col {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.widget-img-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.widget-paste-input {
+  width: 100%;
+  padding: 6px 8px;
+  margin-top: 8px;
+  background: var(--input-bg);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  color: #8b949e;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.widget-paste-input:focus {
+  border-color: var(--accent);
+  border-style: solid;
 }
 
 #bgObjectFit {
