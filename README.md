@@ -1,5 +1,7 @@
 # CSS Matrix3D Perspective Calculator
 
+[Русская версия](README_ru.md)
+
 A browser-based tool for generating CSS `matrix3d()` transforms with perspective projection. Define 4 corners on a field and a widget size — get ready-to-use CSS code.
 
 **Keywords:** CSS matrix3d, perspective transform, 3D CSS, homography, quadrilateral mapping, CSS transform generator, perspective projection, CSS 3D effects, background image, perspective mockup, CSS perspective tool
@@ -12,6 +14,34 @@ A browser-based tool for generating CSS `matrix3d()` transforms with perspective
 - **Preview** — see the live matrix3d() transform result
 
 Copy the CSS from the "CSS Output" section and paste into your project.
+
+## Step-by-Step Example
+
+Place a widget onto a screen in a background image using perspective transform.
+
+### 1. Upload background image
+
+Load a background photo onto the field. This will be your visual reference for positioning corners.
+
+<img src="images/background.jpg" width="600">
+
+### 2. Upload widget image
+
+Load the widget (e.g. a UI panel or screenshot) that you want to place on the screen.
+
+<img src="images/widget.png" width="400">
+
+### 3. Align corners to the target area
+
+Drag the 4 corners on the SVG field to match the edges of the screen (or any quadrilateral surface) in the background image. The preview updates in real time.
+
+### 4. Get the result
+
+The widget is rendered with the correct perspective, matching the screen angle in the background.
+
+<img src="images/result.jpg" width="600">
+
+Copy the generated `matrix3d()` CSS and paste it into your project.
 
 ## Features
 
